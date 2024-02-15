@@ -12,7 +12,7 @@ exports.scheduledWeatherUpdate = functions.pubsub.schedule("0 7,18 * * *")
         key: process.env.REACT_APP_API_KEY,
         base: "https://api.openweathermap.org/data/2.5/",
       };
-      const weatherApilink = `${weatherApi.base}weather?q=${weatherApi.city}&appid=${weatherApi.key}&units=metric`;
+      const weatherApilink = `${weatherApi.base}weather?q=${weatherApi.city}&appid=${weatherApi.key}&units=metric&lang=kr`;
 
       const request = require("request");
       request(weatherApilink, (error, res, body) => {
@@ -21,7 +21,7 @@ exports.scheduledWeatherUpdate = functions.pubsub.schedule("0 7,18 * * *")
 
           db.collection("weatherInfo").doc("weather_item").set({
             degree: weatherData.main.temp, // 온도
-            status: weatherData.weather[0].main, // 날씨 상태
+            status: weatherData.weather[0].description, // 날씨 상태
             updatedAt: admin.firestore.FieldValue.serverTimestamp(),
           })
               .then(() => console.log("openweather API db에 저장 성공"))
@@ -32,3 +32,4 @@ exports.scheduledWeatherUpdate = functions.pubsub.schedule("0 7,18 * * *")
       });
       return null;
     });
+
