@@ -1,38 +1,35 @@
-// /**
-//  * Import function triggers from their respective submodules:
-//  *
-//  * const {onCall} = require("firebase-functions/v2/https");
-//  * const {onDocumentWritten} = require("firebase-functions/v2/firestore");
-//  *
-//  * See a full list of supported triggers at https://firebase.google.com/docs/functions
-//  */
-
-// const { onRequest } = require("firebase-functions/v2/https");
-// const logger = require("firebase-functions/logger");
-
-// // Create and deploy your first functions
-// // https://firebase.google.com/docs/functions/get-started
-
-// exports.helloWorld = onRequest((request, response) => {
-//   logger.info("Hello logs!", { structuredData: true });
-//   response.send("Hello from Firebase!");
-// });
-
-const weatherApi = {
-  city: "Seoul",
-  key: process.env.REACT_APP_API_KEY,
-  base: "https://api.openweathermap.org/data/2.5/",
-};
-
 const functions = require("firebase-functions");
-const cors = require("cors")({origin: true});
-const request = require("request");
-exports.apicall = functions.https.onRequest((req, response) => {
-  cors(req, response, () => {
-    request(`${weatherApi.base}weather?q=${weatherApi.city}&appid=${weatherApi.key}`,
-    // request("https://api.openweathermap.org/data/2.5/weather?q=Seoul&appid=cd8a73751f029a029d33328b0a1abd5f",
-        (error, res, body) => {
-          response.send(res);
-        });
-  });
-});
+const admin = require("firebase-admin");
+admin.initializeApp();
+const db = admin.firestore();
+
+
+exports.scheduledWeatherUpdate = functions.pubsub.schedule("0 7,18 * * *")
+    .timeZone("Asia/Seoul")
+    .onRun(() => {
+      const weatherApi = {
+        city: "Seoul",
+        key: process.env.REACT_APP_API_KEY,
+        base: "https://api.openweathermap.org/data/2.5/",
+      };
+      const weatherApilink = `${weatherApi.base}weather?q=${weatherApi.city}&appid=${weatherApi.key}&units=metric&lang=kr`;
+
+      const request = require("request");
+      request(weatherApilink, (error, res, body) => {
+        if (!error && res.statusCode == 200) {
+          const weatherData = JSON.parse(body);
+
+          db.collection("weatherInfo").doc("weather_item").set({
+            degree: weatherData.main.temp, // 온도
+            status: weatherData.weather[0].description, // 날씨 상태
+            updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+          })
+              .then(() => console.log("openweather API db에 저장 성공"))
+              .catch((err) => console.error("openweather API db에 저장 실패", err));
+        } else {
+          console.error("openweather API 호출 상태이상:", error);
+        }
+      });
+      return null;
+    });
+
