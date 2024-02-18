@@ -1,12 +1,7 @@
-import { firestore } from "../../firebase-config.js";
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+import { fetchWeather } from "../../api/weather.jsx";
 
-const fetchWeather = async () => {
-  const weatherInfo = await firestore.collection("weatherInfo").doc("weather_item").get();
-  return weatherInfo.data();
-};
 
 export default function DailyWeatherComponent(){
     const navigate = useNavigate();
