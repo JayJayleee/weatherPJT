@@ -1,4 +1,4 @@
-import "./App.css";
+import "tailwindcss/tailwind.css";
 import {Routes, Route, Link} from "react-router-dom";
 import MainPage from "./pages/mainPage";
 import OutfitListPage from "./pages/outfitListPage";
