@@ -102,7 +102,7 @@ export default function DailyOutfitCreatePage() {
           <p>상의</p>
           {Object.entries(codyList.top).map(([key, value]) => (
             <button
-              class="px-6 h-12 uppercase font-semibold tracking-wider border-2 border-black bg-teal-400 text-black"
+              class="px-6 h-12 uppercase font-WS tracking-wider border-2 border-black bg-teal-400 text-black"
               type="submit"
               key={key}
               onClick={() => setTopOutfit(value.code)}
