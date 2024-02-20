@@ -4,17 +4,15 @@ module.exports = {
     node: true,
   },
   parserOptions: {
-    "ecmaVersion": 2018,
-    "sourceType": "module",
+    ecmaVersion: 2018,
+    sourceType: "module",
   },
-  extends: [
-    "eslint:recommended",
-    "google",
-  ],
+  extends: ["prettier", "eslint:recommended", "google"],
   rules: {
+    "linebreak-style": 0,
     "no-restricted-globals": ["error", "name", "length"],
     "prefer-arrow-callback": "error",
-    "quotes": ["error", "double", {"allowTemplateLiterals": true}],
+    "quotes": ["error", "double", {allowTemplateLiterals: true}],
     "no-console": "off",
     "no-alert": "off",
     "max-len": ["error", {code: 300}],

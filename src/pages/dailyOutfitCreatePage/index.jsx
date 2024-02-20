@@ -2,9 +2,11 @@ import { useState, useEffect } from "react";
 import { firestore } from "../../firebase-config";
 import { useQuery } from "@tanstack/react-query";
 import { fetchWeather } from "../../api/weather";
+import OutfitCarousel from "../../components/outfitCarousel";
 import { doc, setDoc, collection } from "firebase/firestore";
 
 export default function DailyOutfitCreatePage() {
+
   const {
     data: weatherdata,
     isLoading,
@@ -68,6 +70,7 @@ export default function DailyOutfitCreatePage() {
         `/outfitImage/${currentDegree}_${topOutfit}+${bottomOutfit}+${itemOutfit}.png`
       );
     }
+    // console.log(imgRoute);
   }, [topOutfit, bottomOutfit, itemOutfit]);
 
   const saveDailyLog = async () => {
@@ -94,60 +97,8 @@ export default function DailyOutfitCreatePage() {
       <div>
         <img src={imgRoute} alt="캐릭터 코디 이미지" />
       </div>
-      <p>
-        서울은 {weatherdata.degree}도이고 날씨는 {weatherdata.status}
-      </p>
-      <div>
-        <div>
-          <p>상의</p>
-          {Object.entries(codyList.top).map(([key, value]) => (
-            <button
-              class="px-6 h-12 uppercase font-WS tracking-wider border-2 border-black bg-teal-400 text-black"
-              type="submit"
-              key={key}
-              onClick={() => setTopOutfit(value.code)}
-            >
-              {value.name}
-            </button>
-          ))}
-        </div>
-
-        <div>
-          <p>하의</p>
-          {Object.entries(codyList.bottom).map(([key, value]) => (
-            <button
-              class="px-6 h-12 uppercase font-semibold tracking-wider border-2 border-black bg-teal-400 text-black"
-              type="submit"
-              key={key}
-              onClick={() => setBottomOutfit(value.code)}
-            >
-              {value.name}
-            </button>
-          ))}
-        </div>
-
-        <div>
-          <p>아이템</p>
-          {Object.entries(codyList.item).map(([key, value]) => (
-            <button
-              class="px-6 h-12 uppercase font-semibold tracking-wider border-2 border-black bg-teal-400 text-black"
-              type="submit"
-              key={key}
-              onClick={() => setItemOutfit(value.code)}
-            >
-              {value.name}
-            </button>
-          ))}
-        </div>
-
-        <button
-          onClick={saveDailyLog}
-          class="px-6 h-12  bg-teal-400"
-          type="submit"
-        >
-          저장하기
-        </button>
-      </div>
+  
+      <OutfitCarousel codyList={codyList} pickTop={setTopOutfit} pickBottom={setBottomOutfit} pickItem={setItemOutfit} saveDailyLog={saveDailyLog}/>
     </div>
   );
 }

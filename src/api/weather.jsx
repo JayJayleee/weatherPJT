@@ -6,6 +6,15 @@ export const weatherApi = {
 };
 
 export const fetchWeather = async () => {
-  const weatherInfo = await firestore.collection("weatherInfo").doc("weather_item").get();
+  const weatherInfo = await firestore
+    .collection("weatherInfo")
+    .doc("weather_item")
+    .get();
   return weatherInfo.data();
+};
+
+export const fetchOutfit = async () => {
+  const snapshot = await firestore.collection("dailyLog").get();
+  return snapshot.docs.map(doc => doc.data());
+
 };
