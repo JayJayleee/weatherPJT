@@ -3,8 +3,8 @@ const admin = require("firebase-admin");
 admin.initializeApp();
 const db = admin.firestore();
 
-
-exports.scheduledWeatherUpdate = functions.pubsub.schedule("0 7,18 * * *")
+exports.scheduledWeatherUpdate = functions.pubsub
+    .schedule("0 7,18 * * *")
     .timeZone("Asia/Seoul")
     .onRun(() => {
       const weatherApi = {
@@ -19,11 +19,15 @@ exports.scheduledWeatherUpdate = functions.pubsub.schedule("0 7,18 * * *")
         if (!error && res.statusCode == 200) {
           const weatherData = JSON.parse(body);
 
-          db.collection("weatherInfo").doc("weather_item").set({
-            degree: weatherData.main.temp, // 온도
-            status: weatherData.weather[0].description, // 날씨 상태
-            updatedAt: admin.firestore.FieldValue.serverTimestamp(),
-          })
+          db.collection("weatherInfo")
+              .doc("weather_item")
+              .set({
+                degree: weatherData.main.temp, // 온도
+                status: weatherData.weather[0].description, // 날씨 상태
+                id: weatherData.weather[0].id, // 날씨 아이디,
+                icon: weatherData.weather[0].icon, // 날씨 아이콘,
+                updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+              })
               .then(() => console.log("openweather API db에 저장 성공"))
               .catch((err) => console.error("openweather API db에 저장 실패", err));
         } else {
@@ -32,4 +36,3 @@ exports.scheduledWeatherUpdate = functions.pubsub.schedule("0 7,18 * * *")
       });
       return null;
     });
-
