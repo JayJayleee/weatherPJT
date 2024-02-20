@@ -4,9 +4,9 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchWeather } from "../../api/weather";
 import OutfitCarousel from "../../components/outfitCarousel";
 import { doc, setDoc, collection } from "firebase/firestore";
+import { formattedDate } from "../../constant";
 
 export default function DailyOutfitCreatePage() {
-
   const {
     data: weatherdata,
     isLoading,
@@ -26,6 +26,8 @@ export default function DailyOutfitCreatePage() {
   const [bottomOutfit, setBottomOutfit] = useState("");
   const [itemOutfit, setItemOutfit] = useState("");
   const [imgRoute, setImgRoute] = useState("/outfitImage/basic.png");
+  const [title, setTitle] = useState("");
+  const [diary, setDiary] = useState("");
 
   useEffect(() => {
     const fetchWeatherCloth = async (docId) => {
@@ -70,17 +72,18 @@ export default function DailyOutfitCreatePage() {
         `/outfitImage/${currentDegree}_${topOutfit}+${bottomOutfit}+${itemOutfit}.png`
       );
     }
-    // console.log(imgRoute);
   }, [topOutfit, bottomOutfit, itemOutfit]);
 
   const saveDailyLog = async () => {
-    const docRef = doc(collection(firestore, "dailyLog"));
+    const docRef = doc(collection(firestore, "dailyLog"), formattedDate);
     try {
       await setDoc(docRef, {
         imgRoute: imgRoute,
         degree: weatherdata.degree,
         status: weatherdata.status,
         timestamp: new Date(),
+        Title: title,
+        Diary: diary,
       });
       alert("저장되었습니다!");
     } catch (error) {
@@ -93,12 +96,25 @@ export default function DailyOutfitCreatePage() {
   if (error) return <div>에러 발생: {error.message}</div>;
 
   return (
-    <div class="grid grid-cols-3 gap-4">
+    <div className="grid grid-cols-3 gap-4">
       <div>
         <img src={imgRoute} alt="캐릭터 코디 이미지" />
       </div>
-  
-      <OutfitCarousel codyList={codyList} pickTop={setTopOutfit} pickBottom={setBottomOutfit} pickItem={setItemOutfit} saveDailyLog={saveDailyLog}/>
+
+      <OutfitCarousel
+        codyList={codyList}
+        pickTop={setTopOutfit}
+        pickBottom={setBottomOutfit}
+        pickItem={setItemOutfit}
+        saveDailyLog={saveDailyLog}
+        setTitle={setTitle}
+        setDiary={setDiary}
+        topOutfit={topOutfit}
+        bottomOutfit={bottomOutfit}
+        itemOutfit={itemOutfit}
+        title={title}
+        diary={diary}
+      />
     </div>
   );
 }
