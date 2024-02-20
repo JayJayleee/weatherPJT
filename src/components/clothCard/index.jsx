@@ -1,5 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 
 export default function ClothCard(props) {
-  return <div>index</div>;
+  const cardClass = `border-teal-500 border-4 rounded-2xl flex flex-col items-center ${
+    props.isSelected ? "bg-teal-500" : "bg-white"
+  }`;
+
+  return (
+    <div onClick={props.onClick} className="m-5">
+      <div className={cardClass}>
+        <div className="m-5 bg-green-950 w-3/4 rounded-2xl py-3">
+          <p className="font-ws text-xl text-white font-semibold text-center">
+            {props.name}
+          </p>
+        </div>
+        <img
+          className="w-3/4"
+          src={`/image/clothImage/ast_${props.currentDegree}_${props.code}.png`}
+          alt="의상"
+        />
+      </div>
+    </div>
+  );
 }

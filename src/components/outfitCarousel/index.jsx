@@ -13,6 +13,7 @@ import { useForm } from "react-hook-form";
 import { Form } from "../ui/form";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
+import ClothCard from "../clothCard";
 
 export default function OutfitCarousel(props) {
   const [pickCard, setPickCard] = useState(false);
@@ -67,55 +68,83 @@ export default function OutfitCarousel(props) {
     props.setDiary(value);
     // console.log(value);
   };
+  const [selectedTop, setSelectedTop] = useState(null);
+  const [selectedBottom, setSelectedBottom] = useState(null);
+  const [selectedItem, setSelectedItem] = useState(null);
+
+  const handleCardClick = (type, code) => {
+    // 각 카테고리별로 선택된 아이템의 상태를 업데이트
+    if (type === "top") {
+      setSelectedTop(code);
+      props.pickTop(code);
+    } else if (type === "bottom") {
+      setSelectedBottom(code);
+      props.pickBottom(code);
+    } else if (type === "item") {
+      setSelectedItem(code);
+      props.pickItem(code);
+    }
+  };
 
   return (
-    <div>
-      <Carousel className="w-full">
-        <CarouselContent>
-          <CarouselItem key={1}>
-            <div className="w-full h-30">
-              <p>상의</p>
+    <div className="w-full h-full col-span-2">
+      <Carousel className="w-full h-full bg-slate-100 flex flex-col justify-center items-center">
+        <CarouselContent className="w-full">
+          <CarouselItem
+            className="w-full h-full flex flex-col justify-center items-center"
+            key={1}
+          >
+            <p className="text-center">상의</p>
+            <div className="w-full h-full grid grid-cols-3 grid-rows-1 gap-5">
               {Object.entries(props.codyList.top).map(([key, value]) => (
-                <button
-                  className="px-6 h-12 uppercase font-WS tracking-wider border-2 border-black bg-teal-400 text-black"
-                  type="button"
+                <ClothCard
                   key={key}
-                  onClick={() => props.pickTop(value.code)}
-                >
-                  {value.name}
-                </button>
+                  type="top"
+                  name={value.name}
+                  code={value.code}
+                  currentDegree={props.currentDegree}
+                  isSelected={selectedTop === value.code}
+                  onClick={() => handleCardClick("top", value.code)}
+                />
               ))}
             </div>
           </CarouselItem>
 
-          <CarouselItem key={2}>
-            <div>
-              <p>하의</p>
+          <CarouselItem
+            className="w-full h-full flex flex-col justify-center items-center"
+            key={1}
+          >
+            <p className="text-center">상의</p>
+            <div className="w-full h-full grid grid-cols-3 grid-rows-1 gap-5">
               {Object.entries(props.codyList.bottom).map(([key, value]) => (
-                <button
-                  className="px-6 h-12 uppercase font-semibold tracking-wider border-2 border-black bg-teal-400 text-black"
-                  type="button"
+                <ClothCard
                   key={key}
-                  onClick={() => props.pickBottom(value.code)}
-                >
-                  {value.name}
-                </button>
+                  type="bottom"
+                  name={value.name}
+                  code={value.code}
+                  currentDegree={props.currentDegree}
+                  isSelected={selectedBottom === value.code}
+                  onClick={() => handleCardClick("bottom", value.code)}
+                />
               ))}
             </div>
           </CarouselItem>
 
-          <CarouselItem key={3}>
-            <div>
-              <p>아이템</p>
+          <CarouselItem
+            className="w-full h-full flex flex-col justify-center items-center"
+            key={1}
+          >
+            <p className="text-center">소품</p>
+            <div className="w-full h-full grid grid-cols-3 grid-rows-1 gap-5">
               {Object.entries(props.codyList.item).map(([key, value]) => (
-                <button
-                  className="px-6 h-12 uppercase font-semibold tracking-wider border-2 border-black bg-teal-400 text-black"
-                  type="button"
+                <ClothCard
                   key={key}
-                  onClick={() => props.pickItem(value.code)}
-                >
-                  {value.name}
-                </button>
+                  currentDegree={props.currentDegree}
+                  name={value.name}
+                  code={value.code}
+                  isSelected={selectedItem === value.code}
+                  onClick={() => handleCardClick("item", value.code)}
+                />
               ))}
             </div>
           </CarouselItem>
@@ -148,11 +177,13 @@ export default function OutfitCarousel(props) {
                 </form>
               </Form>
             </div>
+            <div></div>
           </CarouselItem>
         </CarouselContent>
-
-        <CarouselPrevious setIndex={setIndex} />
-        <CarouselNext pickCard={pickCard} setIndex={setIndex} />
+        <div>
+          <CarouselPrevious setIndex={setIndex} />
+          <CarouselNext pickCard={pickCard} setIndex={setIndex} />
+        </div>
       </Carousel>
     </div>
   );

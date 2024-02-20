@@ -25,10 +25,11 @@ export default function DailyOutfitCreatePage() {
   const [topOutfit, setTopOutfit] = useState("");
   const [bottomOutfit, setBottomOutfit] = useState("");
   const [itemOutfit, setItemOutfit] = useState("");
-  const [imgRoute, setImgRoute] = useState("/outfitImage/basic.png");
+  const [imgRoute, setImgRoute] = useState("/image/outfitImage/basic.png");
   const [title, setTitle] = useState("");
   const [diary, setDiary] = useState("");
 
+  console.log(imgRoute);
   useEffect(() => {
     const fetchWeatherCloth = async (docId) => {
       try {
@@ -69,7 +70,7 @@ export default function DailyOutfitCreatePage() {
   useEffect(() => {
     if (currentDegree && (topOutfit || bottomOutfit || itemOutfit)) {
       setImgRoute(
-        `/outfitImage/${currentDegree}_${topOutfit}+${bottomOutfit}+${itemOutfit}.png`
+        `/image/outfitImage/${currentDegree}_${topOutfit}+${bottomOutfit}+${itemOutfit}.png`
       );
     }
   }, [topOutfit, bottomOutfit, itemOutfit]);
@@ -96,8 +97,8 @@ export default function DailyOutfitCreatePage() {
   if (error) return <div>에러 발생: {error.message}</div>;
 
   return (
-    <div className="grid grid-cols-3 gap-4">
-      <div>
+    <div className="grid h-screen grid-cols-3 gap-4 justify-center items-center ">
+      <div className="col-span-1">
         <img src={imgRoute} alt="캐릭터 코디 이미지" />
       </div>
 
@@ -114,6 +115,7 @@ export default function DailyOutfitCreatePage() {
         itemOutfit={itemOutfit}
         title={title}
         diary={diary}
+        currentDegree={currentDegree}
       />
     </div>
   );
