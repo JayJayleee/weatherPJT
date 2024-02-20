@@ -19,7 +19,7 @@ export default function OutfitList() {
   //   console.log(outfitdata, "데이터")
 
   return (
-    <div className="w-full grid grid-cols-5 gap-5">
+    <div className="w-full grid grid-cols-5 gap-5 p-5 overflow-y-scroll">
       {outfitdata &&
         outfitdata.map((outfit, index) => (
           <CharacterCard key={index} props={outfit} />

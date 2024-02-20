@@ -13,7 +13,7 @@ export default function MainPage() {
       />
 
       <div className="z-10 flex flex-col items-center">
-        <img className="w-1/3 mb-5" src="/image/logo.png" alt="logo" />
+        <img className="w-2/3 mb-5" src="/image/logo.png" alt="logo" />
         <Button
           className="px-3 py-4 font-ws w-1/4 text-xl"
           onClick={() => navigate("/outfitlist")}

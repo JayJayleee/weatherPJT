@@ -14,6 +14,17 @@ import { Form } from "../ui/form";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
 import ClothCard from "../clothCard";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+  AlertDialogFooter,
+} from "../ui/alert-dialog";
 
 export default function OutfitCarousel(props) {
   const [pickCard, setPickCard] = useState(false);
@@ -34,12 +45,12 @@ export default function OutfitCarousel(props) {
 
   const formSchema = z.object({
     Title: z.string().min(1, {
-      message: "일기 제목을 써 주세요!",
+      message: "타이틀을 입력해주세요.",
     }),
     Description: z
       .string()
-      .min(1, { message: "일기는 한 글자 이상으로 작성해주세요!" })
-      .max(300, { message: "일기는 최대 300자까지만 작성 가능합니다." }),
+      .min(1, { message: "한 글자 이상 작성해주세요." })
+      .max(300, { message: "최대 300자까지만 작성 가능합니다." }),
   });
 
   const {
@@ -85,7 +96,7 @@ export default function OutfitCarousel(props) {
       props.pickItem(code);
     }
   };
-
+  console.log(props.imgRoute);
   return (
     <div className="w-full h-full col-span-2">
       <Carousel className="w-full h-full bg-slate-100 flex flex-col justify-center items-center">
@@ -94,8 +105,10 @@ export default function OutfitCarousel(props) {
             className="w-full h-full flex flex-col justify-center items-center"
             key={1}
           >
-            <p className="text-center">상의</p>
-            <div className="w-full h-full grid grid-cols-3 grid-rows-1 gap-5">
+            <div className="text-center text-6xl font-ws my-10 font-extrabold underline decoration-sky-500/30">
+              상의는 뭘 입을까?
+            </div>
+            <div className="w-full h-full grid grid-cols-3 grid-rows-1 gap-5 mt-8">
               {Object.entries(props.codyList.top).map(([key, value]) => (
                 <ClothCard
                   key={key}
@@ -112,10 +125,12 @@ export default function OutfitCarousel(props) {
 
           <CarouselItem
             className="w-full h-full flex flex-col justify-center items-center"
-            key={1}
+            key={2}
           >
-            <p className="text-center">상의</p>
-            <div className="w-full h-full grid grid-cols-3 grid-rows-1 gap-5">
+            <div className="text-center text-6xl font-ws my-10 font-extrabold underline decoration-sky-500/30">
+              하의는 뭘 입을까?
+            </div>
+            <div className="w-full h-full grid grid-cols-3 grid-rows-1 gap-5 mt-8">
               {Object.entries(props.codyList.bottom).map(([key, value]) => (
                 <ClothCard
                   key={key}
@@ -132,10 +147,12 @@ export default function OutfitCarousel(props) {
 
           <CarouselItem
             className="w-full h-full flex flex-col justify-center items-center"
-            key={1}
+            key={3}
           >
-            <p className="text-center">소품</p>
-            <div className="w-full h-full grid grid-cols-3 grid-rows-1 gap-5">
+            <div className="text-center text-6xl font-ws my-10 font-extrabold underline decoration-sky-500/30">
+              뭘 들고 나가볼까?
+            </div>
+            <div className="w-full h-full grid grid-cols-3 grid-rows-1 gap-5 mt-8">
               {Object.entries(props.codyList.item).map(([key, value]) => (
                 <ClothCard
                   key={key}
@@ -149,41 +166,90 @@ export default function OutfitCarousel(props) {
             </div>
           </CarouselItem>
 
-          <CarouselItem key={4}>
-            <div>
-              <p className="font-ws">일기장</p>
-              <Form>
+          <CarouselItem
+            className="w-full h-full flex flex-col justify-center items-center"
+            key={4}
+          >
+            <div className="text-center text-6xl font-ws my-10 pr-5 font-extrabold underline decoration-sky-500/30">
+              오늘의 기록
+            </div>
+            <div className="w-3/5">
+              <Form className="mx-5">
                 <form onSubmit={handleSubmit(onSubmit)}>
-                  <div>
-                    <label className="font-ws">타이틀</label>
+                  <div className="h-32 flex flex-col justify-around">
+                    <label className="font-ws text-4xl underline decoration-sky-500/80">
+                      타이틀
+                    </label>
                     <Input
-                      className="font-ws"
+                      className="font-ws my-5 text-lg"
+                      placeholder="오늘 코디는 어떤가요?"
                       {...register("Title", { onChange: handleTitleChange })}
                     />
-                    {errors.Title && <p>{errors.Title.message}</p>}
+                    {errors.Title && (
+                      <p className="font-ws text-red-600 pb-3">
+                        {errors.Title.message}
+                      </p>
+                    )}
                   </div>
-                  <div>
-                    <label className="font-ws">일기</label>
+                  <div className="h-3/4 flex flex-col justify-around mt-4 ">
+                    <label className="font-ws text-4xl underline decoration-sky-500/80">
+                      일기
+                    </label>
                     <Textarea
-                      className="font-ws"
+                      className="font-ws my-5 text-lg min-h-56 max-h-56"
+                      placeholder="오늘은 어떤 일이 일어날까요?"
                       {...register("Description", {
                         onChange: handleDiaryChange,
                       })}
                     />
-                    {errors.Description && <p>{errors.Description.message}</p>}
+                    {errors.Description && (
+                      <p className="font-ws text-red-600 pb-3">
+                        {errors.Description.message}
+                      </p>
+                    )}
                   </div>
-
-                  <Button type="submit">저장하기</Button>
+                  <div className="w-full flex justify-center">
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button className="w-full h-20 font-ws text-3xl mt-3 rounded-full">
+                          저장하기
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent className="rounded-xl flex flex-col items-center">
+                        <AlertDialogHeader>
+                          <AlertDialogTitle className="font-ws text-center text-4xl py-3 underline decoration-sky-500/50">
+                            오늘의 코디가 맞나요?
+                          </AlertDialogTitle>
+                          <img src={props.imgRoute} alt="최종 이미지" />
+                          {/* <AlertDialogDescription className="font-ws text-center text-lg">
+                            한 번 더 확인해보세요!
+                          </AlertDialogDescription> */}
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel className="font-ws rounded-full w-1/3">
+                            아니요..
+                          </AlertDialogCancel>
+                          <AlertDialogAction
+                            className="font-ws rounded-full w-1/3"
+                            onClick={handleSubmit(onSubmit)}
+                          >
+                            맞아요!
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </div>
                 </form>
               </Form>
             </div>
-            <div></div>
           </CarouselItem>
         </CarouselContent>
-        <div>
-          <CarouselPrevious setIndex={setIndex} />
-          <CarouselNext pickCard={pickCard} setIndex={setIndex} />
-        </div>
+        {index !== 4 && (
+          <div className="w-2/5 h-30 grid grid-cols-2 gap-4 mt-20">
+            <CarouselPrevious setIndex={setIndex} />
+            <CarouselNext pickCard={pickCard} setIndex={setIndex} />
+          </div>
+        )}
       </Carousel>
     </div>
   );

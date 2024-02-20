@@ -176,7 +176,7 @@ const CarouselPrevious = React.forwardRef(
         // variant={variant}
         size={size}
         className={cn(
-          "h-8 w-20",
+          "h-20 w-full text-3xl rounded-full bg-teal-700",
           orientation === "horizontal"
             ? "-left-12 top-1/2 -translate-y-1/2"
             : "-top-12 left-1/2 -translate-x-1/2 rotate-90",
@@ -186,7 +186,7 @@ const CarouselPrevious = React.forwardRef(
         onClick={minusIndex}
         {...props}
       >
-        Prev
+        이전
       </Button>
     );
   }
@@ -208,7 +208,7 @@ const CarouselNext = React.forwardRef(
         // variant={variant}
         size={size}
         className={cn(
-          "h-8 w-20",
+          "h-full w-full text-3xl rounded-full bg-teal-800",
           orientation === "horizontal"
             ? "-right-12 top-1/2 -translate-y-1/2"
             : "-bottom-12 left-1/2 -translate-x-1/2 rotate-90",
@@ -218,7 +218,7 @@ const CarouselNext = React.forwardRef(
         onClick={plusIndex}
         {...props}
       >
-        Next
+        다음
       </Button>
     );
   }

@@ -5,8 +5,12 @@ import { fetchWeather } from "../../api/weather";
 import OutfitCarousel from "../../components/outfitCarousel";
 import { doc, setDoc, collection } from "firebase/firestore";
 import { formattedDate } from "../../constant";
+import weatherDescKo from "../../api/weatherDescKo.js";
+import { useToast } from "../../components/ui/use-toast";
+import { useNavigate } from "react-router-dom";
 
 export default function DailyOutfitCreatePage() {
+  const navigate = useNavigate();
   const {
     data: weatherdata,
     isLoading,
@@ -15,6 +19,11 @@ export default function DailyOutfitCreatePage() {
     queryKey: ["getWeather"],
     queryFn: fetchWeather,
   });
+
+  const getWeatherDescription = (weatherId) => {
+    const descriptionObject = weatherDescKo.find((desc) => desc[weatherId]);
+    return descriptionObject ? descriptionObject[weatherId] : "날씨 정보 없음";
+  };
 
   const [codyList, setCodyList] = useState({
     item: {},
@@ -29,7 +38,6 @@ export default function DailyOutfitCreatePage() {
   const [title, setTitle] = useState("");
   const [diary, setDiary] = useState("");
 
-  console.log(imgRoute);
   useEffect(() => {
     const fetchWeatherCloth = async (docId) => {
       try {
@@ -75,6 +83,8 @@ export default function DailyOutfitCreatePage() {
     }
   }, [topOutfit, bottomOutfit, itemOutfit]);
 
+  const { toast } = useToast();
+
   const saveDailyLog = async () => {
     const docRef = doc(collection(firestore, "dailyLog"), formattedDate);
     try {
@@ -86,7 +96,11 @@ export default function DailyOutfitCreatePage() {
         Title: title,
         Diary: diary,
       });
-      alert("저장되었습니다!");
+      navigate("/outfitlist");
+      toast({
+        title: "오늘의 코디 성공!",
+        description: "다른 사람들의 코디도 둘러보세요!",
+      });
     } catch (error) {
       console.error("저장 실패:", error);
       alert("저장에 실패하였습니다.");
@@ -98,7 +112,11 @@ export default function DailyOutfitCreatePage() {
 
   return (
     <div className="grid h-screen grid-cols-3 gap-4 justify-center items-center ">
-      <div className="col-span-1">
+      <div className="col-span-1 w-full flex flex-col justify-center items-center">
+        <div className="font-ws text-3xl w-3/4 text-center p-5 text-white bg-cyan-500/30 mb-4 rounded-full">
+          오늘 날씨는? {weatherdata.degree}°C
+          {getWeatherDescription(weatherdata.id)}!
+        </div>
         <img src={imgRoute} alt="캐릭터 코디 이미지" />
       </div>
 
@@ -116,6 +134,7 @@ export default function DailyOutfitCreatePage() {
         title={title}
         diary={diary}
         currentDegree={currentDegree}
+        imgRoute={imgRoute}
       />
     </div>
   );
