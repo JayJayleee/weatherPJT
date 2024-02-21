@@ -15,6 +15,5 @@ export const fetchWeather = async () => {
 
 export const fetchOutfit = async () => {
   const snapshot = await firestore.collection("dailyLog").get();
-  return snapshot.docs.map(doc => doc.data());
-
+  return snapshot.docs.map((doc) => doc.data());
 };

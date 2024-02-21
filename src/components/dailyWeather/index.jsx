@@ -34,7 +34,7 @@ export default function DailyWeatherComponent() {
       <CardTitle className="p-3 font-ws text-3xl underline decoration-sky-500/50 ">
         오늘의 날씨는?
       </CardTitle>
-      <div className="flex-col flex justify-center items-center rounded-3xl w-3/4 h-1/2 p-10 bg-teal-800/80">
+      <div className="flex-col flex justify-center items-center rounded-3xl w-3/4 h-1/2 p-10 bg-blue-800/60">
         <img
           className="w-5/6"
           src={`http://openweathermap.org/img/wn/${weatherdata.icon}@2x.png`}
@@ -51,7 +51,7 @@ export default function DailyWeatherComponent() {
         </CardTitle>
       </div>
       <Button
-        className="text-lg w-2/3 my-5 rounded-3xl bg-teal-800"
+        className="text-lg w-2/3 my-5 rounded-3xl bg-blue-900"
         onClick={() => navigate("/pickoutfit")}
       >
         오늘은 뭘 입을까?
