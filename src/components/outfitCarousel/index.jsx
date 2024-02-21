@@ -96,7 +96,16 @@ export default function OutfitCarousel(props) {
       props.pickItem(code);
     }
   };
-  console.log(props.imgRoute);
+
+  const handleSaveButtonClick = (e) => {
+    e.preventDefault();
+    handleSubmit((data) => {
+      console.log(data);
+      setOpenModal(true);
+    })();
+  };
+
+  const [openModal, setOpenModal] = useState(false);
   return (
     <div className="w-full h-full col-span-2">
       <Carousel className="w-full h-full bg-slate-100 flex flex-col justify-center items-center">
@@ -209,12 +218,15 @@ export default function OutfitCarousel(props) {
                     )}
                   </div>
                   <div className="w-full flex justify-center">
-                    <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                        <Button className="w-full h-20 font-ws text-3xl mt-3 rounded-full">
-                          저장하기
-                        </Button>
-                      </AlertDialogTrigger>
+                    <Button
+                      type="button"
+                      onClick={handleSaveButtonClick}
+                      className="w-full h-20 font-ws text-3xl mt-3 rounded-full"
+                    >
+                      저장하기
+                    </Button>
+
+                    <AlertDialog open={openModal}>
                       <AlertDialogContent className="rounded-xl flex flex-col items-center">
                         <AlertDialogHeader>
                           <AlertDialogTitle className="font-ws text-center text-4xl py-3 underline decoration-sky-500/50">
@@ -226,7 +238,10 @@ export default function OutfitCarousel(props) {
                           </AlertDialogDescription> */}
                         </AlertDialogHeader>
                         <AlertDialogFooter>
-                          <AlertDialogCancel className="font-ws rounded-full w-1/3">
+                          <AlertDialogCancel
+                            onClick={() => setOpenModal(false)}
+                            className="font-ws rounded-full w-1/3"
+                          >
                             아니요..
                           </AlertDialogCancel>
                           <AlertDialogAction
