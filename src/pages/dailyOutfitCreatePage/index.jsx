@@ -111,31 +111,37 @@ export default function DailyOutfitCreatePage() {
   if (error) return <div>에러 발생: {error.message}</div>;
 
   return (
-    <div className="grid h-screen grid-cols-3 gap-4 justify-center items-center ">
-      <div className="col-span-1 w-full flex flex-col justify-center items-center">
-        <div className="font-ws text-3xl w-3/4 text-center p-5 text-white bg-cyan-500/30 mb-4 rounded-full">
-          오늘 날씨는? {weatherdata.degree}°C
+    <div className="md:grid md:grid-cols-3 md:gap-4 flex flex-col justify-center items-center h-screen">
+      <div className="md:col-span-1 w-full flex flex-col justify-center items-center md:w-auto md:h-2/3">
+        <div className="font-ws text-xl md:text-3xl w-3/4 text-center md:p-5 text-white bg-cyan-500/30 md:mb-4 rounded-full">
+          오늘 날씨는? {weatherdata.degree}°C <br />
           {getWeatherDescription(weatherdata.id)}!
         </div>
-        <img src={imgRoute} alt="캐릭터 코디 이미지" />
+        <img
+          src={imgRoute}
+          alt="캐릭터 코디 이미지"
+          className="h-60 md:h-full my-5"
+        />
       </div>
 
-      <OutfitCarousel
-        codyList={codyList}
-        pickTop={setTopOutfit}
-        pickBottom={setBottomOutfit}
-        pickItem={setItemOutfit}
-        saveDailyLog={saveDailyLog}
-        setTitle={setTitle}
-        setDiary={setDiary}
-        topOutfit={topOutfit}
-        bottomOutfit={bottomOutfit}
-        itemOutfit={itemOutfit}
-        title={title}
-        diary={diary}
-        currentDegree={currentDegree}
-        imgRoute={imgRoute}
-      />
+      <div className="md:col-span-2 w-full">
+        <OutfitCarousel
+          codyList={codyList}
+          pickTop={setTopOutfit}
+          pickBottom={setBottomOutfit}
+          pickItem={setItemOutfit}
+          saveDailyLog={saveDailyLog}
+          setTitle={setTitle}
+          setDiary={setDiary}
+          topOutfit={topOutfit}
+          bottomOutfit={bottomOutfit}
+          itemOutfit={itemOutfit}
+          title={title}
+          diary={diary}
+          currentDegree={currentDegree}
+          imgRoute={imgRoute}
+        />
+      </div>
     </div>
   );
 }

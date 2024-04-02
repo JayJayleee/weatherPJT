@@ -35,6 +35,7 @@ const Carousel = React.forwardRef(
       {
         ...opts,
         axis: orientation === "horizontal" ? "x" : "y",
+        watchDrag: false,
       },
       plugins
     );
@@ -133,6 +134,7 @@ const CarouselContent = React.forwardRef(({ className, ...props }, ref) => {
         className={cn(
           "flex",
           orientation === "horizontal" ? "-ml-4" : "-mt-4 flex-col",
+          "md:h-1/4",
           className
         )}
         {...props}
@@ -176,10 +178,10 @@ const CarouselPrevious = React.forwardRef(
         // variant={variant}
         size={size}
         className={cn(
-          "h-20 w-full text-3xl rounded-full bg-teal-700",
+          "h-10 xl:h-20 w-full text-md md:text-3xl rounded-full bg-teal-700",
           orientation === "horizontal"
-            ? "-left-12 top-1/2 -translate-y-1/2"
-            : "-top-12 left-1/2 -translate-x-1/2 rotate-90",
+            ? "md:-left-12 md:top-1/2 md:-translate-y-1/2"
+            : "md:-top-12 md:left-1/2 md:-translate-x-1/2 rotate-90",
           className
         )}
         disabled={!canScrollPrev}
@@ -208,10 +210,10 @@ const CarouselNext = React.forwardRef(
         // variant={variant}
         size={size}
         className={cn(
-          "h-full w-full text-3xl rounded-full bg-teal-800",
+          "h-10 xl:h-full w-full text-md md:text-3xl rounded-full bg-teal-800",
           orientation === "horizontal"
-            ? "-right-12 top-1/2 -translate-y-1/2"
-            : "-bottom-12 left-1/2 -translate-x-1/2 rotate-90",
+            ? "md:-right-12 md:top-1/2 md:-translate-y-1/2"
+            : "md:-bottom-12 md:left-1/2 md:-translate-x-1/2 rotate-90",
           className
         )}
         disabled={!canScrollNext || !props.pickCard}

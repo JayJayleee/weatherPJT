@@ -4,9 +4,12 @@ import weatherDescKo from "../../api/weatherDescKo.js";
 import { Card, CardTitle, CardContent, CardDescription } from "../ui/card.jsx";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../../components/ui/button";
+import { useMediaQuery } from "react-responsive";
 
 export default function DailyWeatherComponent() {
   const navigate = useNavigate();
+  const isMobile = useMediaQuery({ maxWidth: 1024 });
+
   const getWeatherDescription = (weatherId) => {
     const descriptionObject = weatherDescKo.find((desc) => desc[weatherId]);
     return descriptionObject ? descriptionObject[weatherId] : "날씨 정보 없음";
@@ -30,32 +33,43 @@ export default function DailyWeatherComponent() {
     );
 
   return (
-    <Card className="py-5 w-3/4 h-3/5 flex-col flex justify-around items-center rounded-3xl">
-      <CardTitle className="p-3 font-ws text-3xl underline decoration-sky-500/50 ">
-        오늘의 날씨는?
-      </CardTitle>
-      <div className="flex-col flex justify-center items-center rounded-3xl w-3/4 h-1/2 p-10 bg-blue-800/60">
-        <img
-          className="w-5/6"
-          src={`http://openweathermap.org/img/wn/${weatherdata.icon}@2x.png`}
-          alt=""
-        />
-        <div className="flex justify-center w-full">
-          <CardTitle className="text-white font-semibold text-4xl">
-            {weatherdata.degree}°C
+    <>
+      {isMobile ? (
+        <Button
+          className="fixed bottom-0 mx-auto left-0 right-0 w-full h-10 py-12 text-xl bg-blue-950 z-50 flex items-center rounded-tl-3xl rounded-tr-3xl"
+          onClick={() => navigate("/pickoutfit")}
+        >
+          {Math.floor(weatherdata.degree)}°C의 날씨, 오늘은 뭘 입을까?
+        </Button>
+      ) : (
+        <Card className="py-5 w-80 h-auto md:w-3/4 xl:w-3/4 xl:h-3/5 flex-col flex justify-around items-center rounded-3xl">
+          <CardTitle className="p-3 font-ws xl:text-3xl text-xl underline decoration-sky-500/50 ">
+            오늘의 날씨는?
           </CardTitle>
-        </div>
+          <div className="flex-col flex justify-center items-center rounded-3xl w-3/4 h-1/2 p-10 bg-blue-800/60">
+            <img
+              className="w-20 xl:w-5/6"
+              src={`http://openweathermap.org/img/wn/${weatherdata.icon}@2x.png`}
+              alt=""
+            />
+            <div className="flex justify-center w-full">
+              <CardTitle className="text-white font-semibold text-xl xl:text-4xl">
+                {Math.floor(weatherdata.degree)}°C
+              </CardTitle>
+            </div>
 
-        <CardTitle className="text-xl py-1 text-white">
-          {getWeatherDescription(weatherdata.id)}
-        </CardTitle>
-      </div>
-      <Button
-        className="text-lg w-2/3 my-5 rounded-3xl bg-blue-900"
-        onClick={() => navigate("/pickoutfit")}
-      >
-        오늘은 뭘 입을까?
-      </Button>
-    </Card>
+            <CardTitle className="text-md xl:text-xl py-1 text-white text-center">
+              {getWeatherDescription(weatherdata.id)}
+            </CardTitle>
+          </div>
+          <Button
+            className=" text-md xl:text-lg w-2/3 my-5 rounded-3xl bg-blue-900"
+            onClick={() => navigate("/pickoutfit")}
+          >
+            오늘은 뭘 입을까?
+          </Button>
+        </Card>
+      )}
+    </>
   );
 }

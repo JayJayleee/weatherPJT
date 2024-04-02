@@ -6,10 +6,10 @@ export default function ClothCard(props) {
   }`;
 
   return (
-    <div onClick={props.onClick} className="m-5">
+    <div onClick={props.onClick} className="h-2/3 xl:m-5 m-1">
       <div className={cardClass}>
         <div className="m-5 bg-green-950 w-3/4 rounded-2xl py-3">
-          <p className="font-ws text-xl text-white font-semibold text-center">
+          <p className="font-ws text-xs md:text-sm lg:text-xl text-white font-semibold text-center text-nowrap truncate">
             {props.name}
           </p>
         </div>

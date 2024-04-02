@@ -32,7 +32,7 @@ export default function OutfitList() {
   //   console.log(outfitdata, "데이터")
 
   return (
-    <div className="w-full grid grid-cols-5 gap-5 p-5 snap-y overflow-y-scroll scroll-auto">
+    <div className="w-full lg:h-auto grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-5 p-5 snap-y overflow-y-scroll scroll-auto">
       {outfitdata &&
         outfitdata.map((outfit, index) => (
           <AlertDialog>

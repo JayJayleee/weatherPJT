@@ -73,6 +73,7 @@ export default function OutfitCarousel(props) {
     // console.log(value);
   };
 
+  console.log(props.codyList.bottom);
   const handleDiaryChange = (e) => {
     const { value } = e.target;
     setValue("Description", value, { shouldValidate: true });
@@ -108,16 +109,16 @@ export default function OutfitCarousel(props) {
   const [openModal, setOpenModal] = useState(false);
   return (
     <div className="w-full h-full col-span-2">
-      <Carousel className="w-full h-full bg-slate-100 flex flex-col justify-center items-center">
+      <Carousel className="w-full h-full bg-slate-100 flex flex-col justify-center items-center rounded-xl">
         <CarouselContent className="w-full">
           <CarouselItem
-            className="w-full h-full flex flex-col justify-center items-center"
+            className="w-full md:h-full h-auto flex flex-col justify-center items-center ml-1"
             key={1}
           >
-            <div className="text-center text-6xl font-ws my-10 font-extrabold underline decoration-sky-500/30">
+            <div className="text-center text-4xl md:text-6xl font-ws my-5 md:my-10 font-extrabold underline decoration-sky-500/30">
               상의는 뭘 입을까?
             </div>
-            <div className="w-full h-full grid grid-cols-3 grid-rows-1 gap-5 mt-8">
+            <div className="w-full h-auto grid grid-cols-3 grid-rows-1 md:gap-5 lg:h-full md:mt-8 gap-1 mb-8 xl:mb-0">
               {Object.entries(props.codyList.top).map(([key, value]) => (
                 <ClothCard
                   key={key}
@@ -133,13 +134,13 @@ export default function OutfitCarousel(props) {
           </CarouselItem>
 
           <CarouselItem
-            className="w-full h-full flex flex-col justify-center items-center"
+            className="w-full md:h-full h-auto flex flex-col justify-center items-center ml-1"
             key={2}
           >
-            <div className="text-center text-6xl font-ws my-10 font-extrabold underline decoration-sky-500/30">
+            <div className="text-center text-4xl md:text-6xl font-ws my-5 md:my-10 font-extrabold underline decoration-sky-500/30">
               하의는 뭘 입을까?
             </div>
-            <div className="w-full h-full grid grid-cols-3 grid-rows-1 gap-5 mt-8">
+            <div className="w-full h-auto grid grid-cols-3 grid-rows-1 md:gap-5 lg:h-full md:mt-8 gap-1 mb-8 xl:mb-0">
               {Object.entries(props.codyList.bottom).map(([key, value]) => (
                 <ClothCard
                   key={key}
@@ -155,13 +156,13 @@ export default function OutfitCarousel(props) {
           </CarouselItem>
 
           <CarouselItem
-            className="w-full h-full flex flex-col justify-center items-center"
+            className="w-full md:h-full h-auto flex flex-col justify-center items-center ml-1"
             key={3}
           >
-            <div className="text-center text-6xl font-ws my-10 font-extrabold underline decoration-sky-500/30">
-              뭘 들고 나가볼까?
+            <div className="text-center text-4xl md:text-6xl font-ws my-5 md:my-10 font-extrabold underline decoration-sky-500/30">
+              무엇을 들고 나가볼까?
             </div>
-            <div className="w-full h-full grid grid-cols-3 grid-rows-1 gap-5 mt-8">
+            <div className="w-full h-auto grid grid-cols-3 grid-rows-1 md:gap-5 lg:h-full md:mt-8 gap-1 mb-8 xl:mb-0">
               {Object.entries(props.codyList.item).map(([key, value]) => (
                 <ClothCard
                   key={key}
@@ -176,21 +177,21 @@ export default function OutfitCarousel(props) {
           </CarouselItem>
 
           <CarouselItem
-            className="w-full h-full flex flex-col justify-center items-center"
+            className="w-full md:h-full h-auto flex flex-col justify-center items-center ml-1"
             key={4}
           >
-            <div className="text-center text-6xl font-ws my-10 pr-5 font-extrabold underline decoration-sky-500/30">
+            <div className="text-center text-4xl lg:text-6xl font-ws my-5 md:my-10 font-extrabold underline decoration-sky-500/30">
               오늘의 기록
             </div>
             <div className="w-3/5">
               <Form className="mx-5">
                 <form onSubmit={handleSubmit(onSubmit)}>
-                  <div className="h-32 flex flex-col justify-around">
-                    <label className="font-ws text-4xl underline decoration-sky-500/80">
+                  <div className="h-15 flex flex-col justify-around">
+                    <label className=" text-xl font-ws xl:text-4xl underline decoration-sky-500/80">
                       타이틀
                     </label>
                     <Input
-                      className="font-ws my-5 text-lg"
+                      className="font-ws my-5 text-sm lg:text-lg"
                       placeholder="오늘 코디는 어떤가요?"
                       {...register("Title", { onChange: handleTitleChange })}
                     />
@@ -200,12 +201,12 @@ export default function OutfitCarousel(props) {
                       </p>
                     )}
                   </div>
-                  <div className="h-3/4 flex flex-col justify-around mt-4 ">
-                    <label className="font-ws text-4xl underline decoration-sky-500/80">
+                  <div className="h-1/3 lg:h-3/4 flex flex-col justify-around md:mt-4">
+                    <label className="text-xl font-ws xl:text-4xl underline decoration-sky-500/80">
                       일기
                     </label>
                     <Textarea
-                      className="font-ws my-5 text-lg min-h-56 max-h-56"
+                      className="font-ws h-10 max-h-15 my-5 text-sm md:min-h-30  xl:min-h-56 xl:max-h-56 md:text-lg "
                       placeholder="오늘은 어떤 일이 일어날까요?"
                       {...register("Description", {
                         onChange: handleDiaryChange,
@@ -221,7 +222,7 @@ export default function OutfitCarousel(props) {
                     <Button
                       type="button"
                       onClick={handleSaveButtonClick}
-                      className="w-full h-20 font-ws text-3xl mt-3 rounded-full"
+                      className="w-full h-8 text-xl font-ws mt-3 rounded-full md:w-full xl:h-20 xl:text-3xl "
                     >
                       저장하기
                     </Button>
@@ -260,7 +261,7 @@ export default function OutfitCarousel(props) {
           </CarouselItem>
         </CarouselContent>
         {index !== 4 && (
-          <div className="w-2/5 h-30 grid grid-cols-2 gap-4 mt-20">
+          <div className="w-2/5 h-15 md:h-30 grid grid-cols-2 gap-4 xl:mt-20">
             <CarouselPrevious setIndex={setIndex} />
             <CarouselNext pickCard={pickCard} setIndex={setIndex} />
           </div>
