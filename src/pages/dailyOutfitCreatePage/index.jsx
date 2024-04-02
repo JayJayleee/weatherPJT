@@ -95,6 +95,7 @@ export default function DailyOutfitCreatePage() {
         timestamp: new Date(),
         Title: title,
         Diary: diary,
+        likes: 0,
       });
       navigate("/outfitlist");
       toast({

@@ -29,7 +29,7 @@ export default function OutfitList() {
   if (isLoading) return <div>로딩중(로티같은거 넣기)</div>;
   if (error) return <div>에러 발생: {error.message}</div>;
 
-  //   console.log(outfitdata, "데이터")
+  console.log(outfitdata, "데이터");
 
   return (
     <div className="w-full lg:h-auto grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-5 p-5 snap-y overflow-y-scroll scroll-auto">
