@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchOutfit } from "../../api/weather";
 import CharacterCard from "../characterCard";
 import { useSelector } from "react-redux";
-
+import Lottie from "react-lottie";
+import loadingAnimation from "../../assets/lottie/loading.json";
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -16,24 +17,48 @@ import {
 } from "../ui/alert-dialog";
 
 export default function OutfitList() {
-  const images = useSelector((state) => state.images.images); // 리덕스 스토어에서 이미지 데이터 불러오기
+  const images = useSelector((state) => state.images.images);
 
-  const {
-    data: outfitdata,
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["getOutfit"],
-    queryFn: fetchOutfit,
-  });
+  const [outfitData, setOutfitData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  if (isLoading) return <div>로딩중...</div>;
-  if (error) return <div>에러 발생: {error.message}</div>;
+  useEffect(() => {
+    setIsLoading(true);
+    fetchOutfitWithPerformance()
+      .then((data) => {
+        setOutfitData(data);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        setError(error);
+        setIsLoading(false);
+      });
+  }, []);
+
+  const defaultOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: loadingAnimation,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+    },
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen ">
+        <Lottie options={defaultOptions} height={400} width={400} />
+      </div>
+    );
+  }
+
+  if (error) return <div>{error.message}</div>;
 
   return (
     <div className="w-full lg:h-auto grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-5 p-5 snap-y overflow-y-scroll scroll-auto">
-      {outfitdata &&
-        outfitdata.map((outfit, index) => {
+      {outfitData &&
+        outfitData.map((outfit, index) => {
           const matchingImage =
             images.find((image) => image.path === outfit.imgRoute)?.base64 ||
             outfit.imgRoute;
@@ -70,3 +95,14 @@ export default function OutfitList() {
     </div>
   );
 }
+
+const fetchOutfitWithPerformance = () => {
+  const startTime = performance.now();
+  const response = fetchOutfit();
+  const endTime = performance.now();
+
+  const timeTaken = endTime - startTime;
+  console.log(`요청에 걸린 시간: ${timeTaken}ms`);
+
+  return response;
+};
