@@ -20,3 +20,12 @@ export const fetchOutfit = async () => {
     .get();
   return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 };
+
+export const fetchOutfitWithTiming = () => {
+  const startTime = performance.now();
+  const result = fetchOutfit();
+  const endTime = performance.now();
+
+  console.log(`fetchOutfit 실행 시간: ${endTime - startTime}ms`);
+  return result;
+};

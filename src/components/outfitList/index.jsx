@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { fetchOutfit } from "../../api/weather";
+import { fetchOutfit, fetchOutfitWithTiming } from "../../api/weather";
 import CharacterCard from "../characterCard";
 import { useSelector } from "react-redux";
 import Lottie from "react-lottie";
@@ -19,22 +19,16 @@ import {
 export default function OutfitList() {
   const images = useSelector((state) => state.images.images);
 
-  const [outfitData, setOutfitData] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    setIsLoading(true);
-    fetchOutfitWithPerformance()
-      .then((data) => {
-        setOutfitData(data);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        setError(error);
-        setIsLoading(false);
-      });
-  }, []);
+  const {
+    data: outfitdata,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["getOutfit"],
+    queryFn: fetchOutfitWithTiming,
+    staleTime: 5 * 60 * 1000,
+    cacheTime: 15 * 60 * 1000,
+  });
 
   const defaultOptions = {
     loop: true,
@@ -57,8 +51,8 @@ export default function OutfitList() {
 
   return (
     <div className="w-full lg:h-auto grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-5 p-5 snap-y overflow-y-scroll scroll-auto">
-      {outfitData &&
-        outfitData.map((outfit, index) => {
+      {outfitdata &&
+        outfitdata.map((outfit, index) => {
           const matchingImage =
             images.find((image) => image.path === outfit.imgRoute)?.base64 ||
             outfit.imgRoute;
@@ -75,7 +69,7 @@ export default function OutfitList() {
                     {outfit.Title}
                   </AlertDialogTitle>
                   <img
-                    src={matchingImage.base64}
+                    src={matchingImage}
                     className="w-3/4 rounded-xl p-5"
                     alt="최종 이미지"
                   />
@@ -95,14 +89,3 @@ export default function OutfitList() {
     </div>
   );
 }
-
-const fetchOutfitWithPerformance = () => {
-  const startTime = performance.now();
-  const response = fetchOutfit();
-  const endTime = performance.now();
-
-  const timeTaken = endTime - startTime;
-  console.log(`요청에 걸린 시간: ${timeTaken}ms`);
-
-  return response;
-};
