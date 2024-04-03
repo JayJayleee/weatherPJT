@@ -73,7 +73,7 @@ export default function OutfitCarousel(props) {
     // console.log(value);
   };
 
-  console.log(props.codyList.bottom);
+  // console.log(props.codyList.bottom);
   const handleDiaryChange = (e) => {
     const { value } = e.target;
     setValue("Description", value, { shouldValidate: true });
@@ -101,7 +101,7 @@ export default function OutfitCarousel(props) {
   const handleSaveButtonClick = (e) => {
     e.preventDefault();
     handleSubmit((data) => {
-      console.log(data);
+      // console.log(data);
       setOpenModal(true);
     })();
   };
