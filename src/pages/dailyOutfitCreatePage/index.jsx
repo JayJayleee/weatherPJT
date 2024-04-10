@@ -8,8 +8,10 @@ import { formattedDate } from "../../constant";
 import weatherDescKo from "../../api/weatherDescKo.js";
 import { useToast } from "../../components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 export default function DailyOutfitCreatePage() {
+  const images = useSelector((state) => state.images.images);
   const navigate = useNavigate();
   const {
     data: weatherdata,
@@ -75,13 +77,22 @@ export default function DailyOutfitCreatePage() {
     }
   }, [weatherdata]);
 
+  // useEffect(() => {
+  //   if (currentDegree && (topOutfit || bottomOutfit || itemOutfit)) {
+  //     setImgRoute(
+  //       `/image/outfitImage/${currentDegree}_${topOutfit}+${bottomOutfit}+${itemOutfit}.png`
+  //     );
+  //   }
+  // }, [topOutfit, bottomOutfit, itemOutfit]);
+
   useEffect(() => {
-    if (currentDegree && (topOutfit || bottomOutfit || itemOutfit)) {
-      setImgRoute(
-        `/image/outfitImage/${currentDegree}_${topOutfit}+${bottomOutfit}+${itemOutfit}.png`
-      );
-    }
-  }, [topOutfit, bottomOutfit, itemOutfit]);
+    const imagePath = `/image/outfitImage/${currentDegree}_${topOutfit}+${bottomOutfit}+${itemOutfit}.png`;
+    const imageBase64 = images.find((image) => image.path === imagePath);
+
+    setImgRoute(
+      imageBase64 ? imageBase64.base64 : "/image/outfitImage/basic.png"
+    );
+  }, [currentDegree, topOutfit, bottomOutfit, itemOutfit, images]);
 
   const { toast } = useToast();
 
